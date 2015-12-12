@@ -42,6 +42,11 @@ $app->get('/apps/membership', function ($request, $response, $args) {
         $q_members->setParameter(':area', "%".$_GET['area']."%");
     }
 
+    if ((isset($_GET['name'])) && (!empty($_GET['name']))) {
+        $q_members->andWhere('m.fullname LIKE :fullname');
+        $q_members->setParameter(':fullname', "%".$_GET['name']."%");
+    }
+
     // Paging handling
     $countQueryBuilderModifier = function ($q_members) {
         $q_members->select('COUNT(DISTINCT u.user_id) AS total_results')

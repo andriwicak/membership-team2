@@ -1,5 +1,14 @@
 <?php $this->layout('layouts::layout-system'); ?>
 
+<?php
+$this->append_js(array(
+    $this->uri_base_url().'/public/js/jquery.popupoverlay.js',
+    $this->uri_path_for('membership-profile-javascript'),
+    $this->uri_base_url().'/public/js/app/membership/portfolio-add.js',
+    $this->uri_base_url().'/public/js/app/membership/skill-add.js'
+));
+?>
+
 <div class="full-width-section">
 	<div class="container">
 
@@ -175,6 +184,60 @@
 
             </table>
         </div>
+                <h3>Skills</h3>
+
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th style="font-weight: bold;">#</th>
+                                <th style="font-weight: bold;">Skill Global</th>
+                                <th style="font-weight: bold;">Skill Spesific</th>
+                                <th style="font-weight: bold; text-align: center;">Self Assesment</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <?php
+                            $num_skill = 1;
+                            foreach ($member_skills as $item_skill):
+                            ?>
+                            <tr>
+                                <td>
+                                    <?php echo $num_skill; ?>
+                                </td>
+
+                                <td>
+                                    <?php echo $item_skill['skill_parent_name']; ?>
+                                </td>
+
+                                <td>
+                                    <?php echo $item_skill['skill_name']; ?>
+                                </td>
+
+                                <td style="text-align: center;">
+                                    <?php echo $item_skill['skill_self_assesment']; ?>
+                                </td>
+
+                                <td>
+                                    <?php
+                                    $unique = md5($num_skill.$item_skill['member_skill_id']);
+                                    ?>
+                                    <form action="<?php echo $this->uri_path_for('membership-skill-delete', array('id' => $item_skill['member_skill_id'])); ?>" name="post_<?php echo $unique; ?>" id="post_<?php echo $unique; ?>" style="display:none;" method="post"><input autocomplete="off" name="_method" value="POST" type="hidden"></form>
+                                    <a href="#" onclick="if (confirm('Delete this skill item?')) { document.post_<?php echo $unique; ?>.submit(); } event.returnValue = false; return false;"><i class="fa fa-trash"></i> Delete</a>
+                                </td>
+                            </tr>
+                            <?php
+                            $num_skill++;
+                            endforeach;
+                            ?>
+
+                        </tbody>
+                    </table>
+
+            </div>
 	</div>
 
 	<div class="dt-sc-margin50"></div>
